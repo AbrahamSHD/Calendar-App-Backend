@@ -4,11 +4,19 @@ import * as joi from 'joi';
 
 interface EnvVars {
   PORT: number;
+  MONGO_DB_NAME: string;
+  MONGO_DB_URL: string;
+  MONGO_USER: string;
+  MONGO_PASS: string;
 }
 
 const envsSchema = joi
   .object({
     PORT: joi.number().required(),
+    MONGO_DB_NAME: joi.string().required(),
+    MONGO_DB_URL: joi.string().uri().required(),
+    MONGO_USER: joi.string().required(),
+    MONGO_PASS: joi.string().required(),
   })
   .unknown(true);
 
@@ -22,4 +30,8 @@ const envVars: EnvVars = value;
 
 export const envs = {
   port: envVars.PORT,
+  mongoDbName: envVars.MONGO_DB_NAME,
+  mongoDbUrl: envVars.MONGO_DB_URL,
+  mongoUser: envVars.MONGO_USER,
+  mongoPass: envVars.MONGO_PASS,
 };
