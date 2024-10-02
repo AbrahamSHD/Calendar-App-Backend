@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -16,8 +16,9 @@ export class AuthController {
     return this.authService.login(createUserDto);
   }
 
-  @Get('/renew')
-  renew() {
-    return this.authService.renew();
+  @Post('/renew')
+  renew(@Headers('Authorization') authorization: string) {
+    const token = authorization.replace('Bearer ', '');
+    return this.authService.validateToken(token);
   }
 }

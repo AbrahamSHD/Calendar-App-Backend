@@ -71,14 +71,19 @@ export class AuthService {
   async create(createUserDto: CreateUserDto) {
     const { name, email, password } = createUserDto;
 
-    this.findOneByEmail(email);
-
     createUserDto.name = name.toLowerCase();
     this.trimStrings(createUserDto);
 
-    const passHashed = this.bcrypt.hash(password);
-
     try {
+      const findUser = await this.userModel.findOne({ email });
+
+      if (findUser) {
+        throw new ConflictException(
+          `User with Email ${findUser.email} already exist`,
+        );
+      }
+
+      const passHashed = this.bcrypt.hash(password);
       const user = await this.userModel.create({
         name,
         email,
@@ -87,7 +92,7 @@ export class AuthService {
 
       delete user.password;
 
-      const token = this.getJwtToken({ email });
+      const token = this.getJwtToken({ name, email });
 
       return {
         ok: true,
@@ -101,22 +106,6 @@ export class AuthService {
     } catch (error) {
       this.handleExceptions(error);
     }
-  }
-
-  async findOneByEmail(email: string) {
-    const user = await this.userModel.findOne({ email });
-
-    if (user) {
-      throw new ConflictException({
-        statusCode: 409,
-        message: {
-          message: 'El usuario ya existe',
-          details: 'Prueba con otro correo electrónico.',
-        },
-        error: 'Conflict',
-      });
-    }
-    return;
   }
 
   async login(createUserDto: CreateUserDto) {
@@ -134,7 +123,7 @@ export class AuthService {
         throw new UnauthorizedException('Email/Password not valid');
       }
 
-      const token = this.getJwtToken({ email });
+      const token = this.getJwtToken({ name, email });
 
       const userData = {
         name,
@@ -155,14 +144,24 @@ export class AuthService {
     }
   }
 
-  renew() {
+  async validateToken(token: string): Promise<any> {
     try {
+      const { name, email } = this.jwtService.verify(token);
+
+      const getToken = this.getJwtToken({ name, email });
+
       return {
         ok: true,
-        msg: 'renew',
+        getToken,
       };
     } catch (error) {
-      console.log(error);
+      if (error.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Token has expired');
+      } else if (error.name === 'JsonWebTokenError') {
+        throw new UnauthorizedException('Invalid token');
+      } else {
+        throw new UnauthorizedException('Token validation failed');
+      }
     }
   }
 }
