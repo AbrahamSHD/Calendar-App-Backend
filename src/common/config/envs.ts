@@ -8,6 +8,7 @@ interface EnvVars {
   MONGO_DB_URL: string;
   MONGO_USER: string;
   MONGO_PASS: string;
+  JWT_SECRET: string;
 }
 
 const envsSchema = joi
@@ -17,6 +18,7 @@ const envsSchema = joi
     MONGO_DB_URL: joi.string().uri().required(),
     MONGO_USER: joi.string().required(),
     MONGO_PASS: joi.string().required(),
+    JWT_SECRET: joi.string().required(),
   })
   .unknown(true);
 
@@ -34,4 +36,5 @@ export const envs = {
   mongoDbUrl: envVars.MONGO_DB_URL,
   mongoUser: envVars.MONGO_USER,
   mongoPass: envVars.MONGO_PASS,
+  jwtSecret: envVars.JWT_SECRET,
 };
