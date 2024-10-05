@@ -4,13 +4,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
-import { EventsModule } from './events/events.module';
 import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
     AuthModule,
-    EventsModule,
     CommonModule,
     DatabaseModule,
     ConfigModule.forRoot({
