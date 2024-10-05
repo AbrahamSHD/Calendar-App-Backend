@@ -1,6 +1,8 @@
 import { Controller, Post, Body, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { BearerTokenValidationPipe } from 'src/common/pipes/Bearer-token.pipe';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -12,13 +14,17 @@ export class AuthController {
   }
 
   @Post('/login')
-  login(@Body() createUserDto: CreateUserDto) {
-    return this.authService.login(createUserDto);
+  login(@Body() loginUserDto: LoginUserDto) {
+    return this.authService.login(loginUserDto);
   }
 
   @Post('/renew')
-  renew(@Headers('Authorization') authorization: string) {
-    const token = authorization.replace('Bearer ', '');
-    return this.authService.validateToken(token);
+  renew(
+    @Headers('authorization') token: string, // Extraemos el token del header
+  ) {
+    // Aplicamos manualmente el BearerTokenValidationPipe
+    const validToken = new BearerTokenValidationPipe().transform(token);
+
+    return this.authService.validateToken(validToken);
   }
 }

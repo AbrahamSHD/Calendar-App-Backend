@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
-  InternalServerErrorException,
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -15,6 +14,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from 'src/common/Models/user.entity';
 import { BcryptAdapter } from 'src/common/config/bcrypt.adapter';
 import { JwtPayload } from 'src/common/interfaces/jwt-payload';
+import { LoginUserDto } from './dto/login-user.dto';
+import { ExceptionHandler } from 'src/common/helpers/handle.exceptions';
 
 @Injectable()
 export class AuthService {
@@ -26,29 +27,6 @@ export class AuthService {
     private readonly userModel: Model<User>,
     private readonly jwtService: JwtService,
   ) {}
-
-  private handleExceptions(error: any) {
-    this.logger.error(error);
-
-    if (error.code === 11000) {
-      throw new BadRequestException(
-        `User exist in db ${JSON.stringify(error.keyValue)}`,
-      );
-    }
-    if (error.status === 401) {
-      throw new UnauthorizedException(error.message);
-    }
-    if (error.status === 409) {
-      throw new ConflictException(error.message);
-    }
-    if (error.status === 400) {
-      throw new BadRequestException(error.message);
-    }
-    if (error.code === 500) {
-      throw new InternalServerErrorException(error.message);
-    }
-    throw new InternalServerErrorException(`Check server logs`);
-  }
 
   private getJwtToken(payload: JwtPayload) {
     try {
@@ -104,12 +82,12 @@ export class AuthService {
         },
       };
     } catch (error) {
-      this.handleExceptions(error);
+      ExceptionHandler.handle(error);
     }
   }
 
-  async login(createUserDto: CreateUserDto) {
-    const { name, email, password } = createUserDto;
+  async login(loginUserDto: LoginUserDto) {
+    const { name, email, password } = loginUserDto;
     const user = await this.userModel.findOne({ email });
 
     try {
@@ -140,11 +118,11 @@ export class AuthService {
         user: { ...userData },
       };
     } catch (error) {
-      this.handleExceptions(error);
+      ExceptionHandler.handle(error);
     }
   }
 
-  async validateToken(token: string): Promise<any> {
+  async validateToken(token: string) {
     try {
       const { name, email } = this.jwtService.verify(token);
 
@@ -155,13 +133,7 @@ export class AuthService {
         getToken,
       };
     } catch (error) {
-      if (error.name === 'TokenExpiredError') {
-        throw new UnauthorizedException('Token has expired');
-      } else if (error.name === 'JsonWebTokenError') {
-        throw new UnauthorizedException('Invalid token');
-      } else {
-        throw new UnauthorizedException('Token validation failed');
-      }
+      ExceptionHandler.handle(error);
     }
   }
 }
