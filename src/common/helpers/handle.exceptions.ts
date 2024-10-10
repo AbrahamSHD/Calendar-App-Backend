@@ -4,6 +4,7 @@ import {
   ConflictException,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 
 const logger = new Logger('HandleExceptions');
@@ -16,6 +17,11 @@ export class ExceptionHandler {
       throw new UnauthorizedException('Token has expired');
     } else if (error.name === 'JsonWebTokenError') {
       throw new UnauthorizedException('Invalid token');
+    }
+
+    // Manejo de errores específicos de eventos
+    if (error instanceof NotFoundException) {
+      throw new NotFoundException(error.message);
     }
 
     // Manejo de excepciones de base de datos
