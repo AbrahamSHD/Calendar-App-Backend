@@ -1,12 +1,18 @@
 import { Type } from 'class-transformer';
-import { IsDate, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsMongoId,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateEventDto {
   @IsNotEmpty()
   @IsString()
   title: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   notes: string;
 
