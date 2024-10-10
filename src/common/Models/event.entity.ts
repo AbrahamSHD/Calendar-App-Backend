@@ -13,7 +13,6 @@ export class Events extends Document {
 
   @Prop({
     type: String,
-    required: true,
   })
   notes: string;
 
