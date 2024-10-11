@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { BearerTokenValidationPipe } from '../pipes/Bearer-token.pipe';
+import { BearerTokenValidationPipe } from '../pipes/bearer-token.pipe';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {

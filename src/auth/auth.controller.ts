@@ -2,7 +2,7 @@ import { Controller, Post, Body, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { BearerTokenValidationPipe } from '../common/pipes/Bearer-token.pipe';
+import { BearerTokenValidationPipe } from '../common/pipes/bearer-token.pipe';
 
 @Controller('auth')
 export class AuthController {
