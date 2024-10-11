@@ -19,14 +19,12 @@ export class JwtAuthGuard implements CanActivate {
       throw new UnauthorizedException('Authorization token is missing');
     }
 
-    // Aplicar el pipe para validar y extraer el token limpio
     const validToken = new BearerTokenValidationPipe().transform(token);
 
     try {
-      // Verificar el token usando JwtService
       const decoded = this.jwtService.verify(validToken);
-      request.user = decoded; // Almacena los datos del token (como user ID) en la request
-      return true; // Permite el acceso si el token es válido
+      request.user = decoded;
+      return true;
     } catch (error) {
       throw new UnauthorizedException('Invalid or expired token');
     }
