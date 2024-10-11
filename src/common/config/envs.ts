@@ -22,15 +22,6 @@ const envsSchema = joi
   })
   .unknown(true);
 
-console.log('Variables de Entorno Disponibles:', {
-  PORT: process.env.PORT,
-  MONGO_DB_NAME: process.env.MONGO_DB_NAME,
-  MONGO_DB_URL: process.env.MONGO_DB_URL,
-  MONGO_USER: process.env.MONGO_USER,
-  MONGO_PASS: process.env.MONGO_PASS,
-  JWT_SECRET: process.env.JWT_SECRET,
-});
-
 const { error, value } = envsSchema.validate(process.env);
 
 if (error) {
