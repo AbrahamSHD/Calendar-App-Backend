@@ -1,6 +1,6 @@
 import { Logger, Provider } from '@nestjs/common';
 import * as mongoose from 'mongoose';
-import { envs } from 'src/common/config/envs';
+import { envs } from '../common/config/envs';
 
 const logger = new Logger('DatabaseProvider');
 const url = envs.mongoDbUrl;

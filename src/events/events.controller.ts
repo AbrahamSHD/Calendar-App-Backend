@@ -13,7 +13,7 @@ import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { ParseMongoIdPipe } from '../common/pipes/parse-mongo-id.pipe';
-import { JwtAuthGuard } from 'src/common/guards/jwt-guard.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-guard.guard';
 
 @Controller('events')
 export class EventsController {

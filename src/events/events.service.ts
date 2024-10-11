@@ -5,13 +5,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
-import { Events } from 'src/common/Models/event.entity';
-import { ExceptionHandler } from 'src/common/helpers/handle.exceptions';
-import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/common/Models/user.entity';
+import { Events } from '../common/Models/event.entity';
+import { ExceptionHandler } from '../common/helpers/handle.exceptions';
+import { User } from '../common/Models/user.entity';
 
 @Injectable()
 export class EventsService {

@@ -11,11 +11,11 @@ import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from 'src/common/Models/user.entity';
-import { BcryptAdapter } from 'src/common/config/bcrypt.adapter';
-import { JwtPayload } from 'src/common/interfaces/jwt-payload';
+import { User } from '../common/Models/user.entity';
+import { BcryptAdapter } from '../common/config/bcrypt.adapter';
+import { JwtPayload } from '../common/interfaces/jwt-payload';
 import { LoginUserDto } from './dto/login-user.dto';
-import { ExceptionHandler } from 'src/common/helpers/handle.exceptions';
+import { ExceptionHandler } from '../common/helpers/handle.exceptions';
 
 @Injectable()
 export class AuthService {

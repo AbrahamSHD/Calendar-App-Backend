@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { EventsController } from './events.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Events, EventSchema } from 'src/common/Models/event.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { envs } from 'src/common/config/envs';
-import { AuthModule } from 'src/auth/auth.module';
+import { Events, EventSchema } from '../common/Models/event.entity';
+import { envs } from '../common/config/envs';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   controllers: [EventsController],
