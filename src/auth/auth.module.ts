@@ -29,5 +29,6 @@ import { envs } from 'src/common/config/envs';
       },
     ]),
   ],
+  exports: [MongooseModule],
 })
 export class AuthModule {}
