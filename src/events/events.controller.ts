@@ -25,33 +25,37 @@ export class EventsController {
     @Headers('authorization') token: string,
     @Body() createEventDto: CreateEventDto,
   ) {
-    return this.eventsService.create(createEventDto);
+    return this.eventsService.create(createEventDto, token);
   }
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.eventsService.findAll();
+  findAll(@Headers('authorization') token: string) {
+    return this.eventsService.findAll(token);
   }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  findOne(@Param('id', ParseMongoIdPipe) id: string) {
-    return this.eventsService.findOne(id);
+  findOneById(@Param('id', ParseMongoIdPipe) id: string) {
+    return this.eventsService.findOneById(id);
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   update(
+    @Headers('authorization') token: string,
     @Param('id', ParseMongoIdPipe) id: string,
     @Body() updateEventDto: UpdateEventDto,
   ) {
-    return this.eventsService.update(id, updateEventDto);
+    return this.eventsService.update(id, updateEventDto, token);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id', ParseMongoIdPipe) id: string) {
-    return this.eventsService.remove(id);
+  remove(
+    @Headers('authorization') token: string,
+    @Param('id', ParseMongoIdPipe) id: string,
+  ) {
+    return this.eventsService.remove(id, token);
   }
 }
