@@ -26,7 +26,7 @@ export class CreateEventDto {
   @IsDate()
   end: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @IsMongoId()
   user: string;
