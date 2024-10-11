@@ -21,6 +21,7 @@ const envsSchema = joi
     JWT_SECRET: joi.string().required(),
   })
   .unknown(true);
+console.log(process.env);
 
 const { error, value } = envsSchema.validate(process.env);
 
