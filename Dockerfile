@@ -1,25 +1,25 @@
-# Install dependencies only when needed
+# Etapa 1: Instalar dependencias
 FROM node:20.12.2-alpine AS deps
 
 # Instalar compatibilidad con libc6
 RUN apk add --no-cache libc6-compat
 
-# Crear directorio de trabajo
+# Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar los archivos de dependencias
+# Copiar archivos de dependencias
 COPY package.json package-lock.json ./
 
-# Instalar dependencias usando el lockfile
+# Instalar dependencias
 RUN npm install --frozen-lockfile
 
-# Build the app with cached dependencies
+# Etapa 2: Construir la aplicación
 FROM node:20.12.2-alpine AS builder
 
-# Crear directorio de trabajo
+# Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar las dependencias del contenedor anterior
+# Copiar dependencias desde la etapa anterior
 COPY --from=deps /app/node_modules ./node_modules
 
 # Copiar el resto de los archivos de la aplicación
@@ -28,20 +28,20 @@ COPY . .
 # Ejecutar el script de build
 RUN npm run build
 
-# Production image, copy all the files and run the application
+# Etapa 3: Imagen de producción
 FROM node:20.12.2-alpine AS runner
 
-# Set working directory for production
+# Establecer directorio de trabajo
 WORKDIR /usr/src/app
 
-# Copiar package.json y lockfile para producción
+# Copiar archivos de producción
 COPY package.json package-lock.json ./
 
-# Instalar solo las dependencias de producción
+# Instalar solo dependencias de producción
 RUN npm install --production
 
-# Copiar el build desde el contenedor builder
+# Copiar el build desde la etapa builder
 COPY --from=builder /app/dist ./dist
 
-# Comando de inicio de la aplicación
+# Comando para iniciar la aplicación
 CMD ["node", "dist/main"]
