@@ -6,7 +6,6 @@ import { User } from './user.entity';
 export class Events extends Document {
   @Prop({
     type: String,
-    index: true,
     required: true,
   })
   title: string;
