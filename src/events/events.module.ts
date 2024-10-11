@@ -6,11 +6,13 @@ import { Events, EventSchema } from 'src/common/Models/event.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { envs } from 'src/common/config/envs';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [EventsController],
   providers: [EventsService],
   imports: [
+    AuthModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       useFactory: () => {
