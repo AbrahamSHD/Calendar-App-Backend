@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { CommonModule } from './common/common.module';
 import { EventsModule } from './events/events.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -19,8 +21,9 @@ import { EventsModule } from './events/events.module';
     MongooseModule.forRoot(process.env.MONGO_DB_URL, {
       dbName: process.env.MONGO_DB_NAME,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
