@@ -130,7 +130,8 @@ export class AuthService {
 
       return {
         ok: true,
-        getToken,
+        email: email,
+        token: getToken,
       };
     } catch (error) {
       ExceptionHandler.handle(error);
