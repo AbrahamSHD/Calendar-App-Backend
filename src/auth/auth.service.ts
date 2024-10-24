@@ -87,10 +87,9 @@ export class AuthService {
   }
 
   async login(loginUserDto: LoginUserDto) {
-    const { name, email, password } = loginUserDto;
-    const user = await this.userModel.findOne({ email });
-
     try {
+      const { name, email, password } = loginUserDto;
+      const user = await this.userModel.findOne({ email });
       if (!user) {
         throw new BadRequestException(`User with email ${email} not found`);
       }
@@ -103,19 +102,14 @@ export class AuthService {
 
       const token = this.getJwtToken({ name, email });
 
-      const userData = {
-        name,
-        email,
-        password,
-      };
-
-      delete userData.password;
-
       return {
         ok: true,
         msg: 'login',
         token,
-        user: { ...userData },
+        user: {
+          id: user._id,
+          name: user.name,
+        },
       };
     } catch (error) {
       ExceptionHandler.handle(error);
@@ -126,11 +120,16 @@ export class AuthService {
     try {
       const { name, email } = this.jwtService.verify(token);
 
+      const user = await this.userModel.findOne({ email });
+
       const getToken = this.getJwtToken({ name, email });
 
       return {
         ok: true,
-        email: email,
+        user: {
+          id: user._id,
+          name: user.name,
+        },
         token: getToken,
       };
     } catch (error) {
