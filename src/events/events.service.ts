@@ -84,7 +84,6 @@ export class EventsService {
         .find({ user: user._id })
         .populate('user', 'name email');
 
-      console.log(events);
       return {
         ok: true,
         message: 'Events Found',
